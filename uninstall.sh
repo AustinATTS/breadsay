@@ -1,0 +1,41 @@
+#!/bin/bash
+# Uninstallation script for breadsay
+
+set -e
+
+echo "╔════════════════════════════════════════╗"
+echo "║    breadsay Uninstallation Script      ║"
+echo "╚════════════════════════════════════════╝"
+echo ""
+
+SYSTEM_INSTALL="/usr/local/bin/breadsay"
+USER_INSTALL="$HOME/.local/bin/breadsay"
+
+removed=false
+
+# Check and remove from system directory
+if [ -f "$SYSTEM_INSTALL" ]; then
+    if [ "$EUID" -eq 0 ]; then
+        echo "Removing from system directory..."
+        rm -f "$SYSTEM_INSTALL"
+        removed=true
+    else
+        echo "System installation found at $SYSTEM_INSTALL"
+        echo "  Run with sudo to remove: sudo $0"
+    fi
+fi
+
+# Check and remove from user directory
+if [ -f "$USER_INSTALL" ]; then
+    echo "Removing from user directory..."
+    rm -f "$USER_INSTALL"
+    removed=true
+fi
+
+if [ "$removed" = true ]; then
+    echo ""
+    echo "breadsay has been uninstalled"
+else
+    echo ""
+    echo "breadsay installation not found"
+fi
